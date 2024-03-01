@@ -22,11 +22,11 @@ class SignupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'office' => 'required|string',
-            'username' => 'required|string|unique:users,username',
-            'password' => 'required',
-            'role' => 'string',
-            'active' => 'boolean',
+            // 'office' => 'required|string',
+            // 'username' => 'required|string|unique:users,username',
+            // 'password' => 'required',
+            // 'role' => 'string',
+            // 'active' => 'boolean',
         ];
     }
 }

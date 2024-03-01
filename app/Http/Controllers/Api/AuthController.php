@@ -7,47 +7,72 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        $credentials = $request->validated();
-        $credentials["password"] = bcrypt($credentials["password"]);
-        $user = User::query()->where("username", $credentials["username"])->first();
+        $user = $request->username;
+        $password = $request->password;
 
-        if ($user && Hash::check($request->input('password'), $user->password)) {
-            // Password matches, do something (e.g., log in the user)
-            $token = $user->createToken('main')->plainTextToken;
-            return response((compact('user', 'token')));
-        } else {
-            // Invalid username or password
-            return response()->json(['message' => 'Umekosea Jina au Neno la siri'], 401);
+        if (empty($user) || empty($password)) {
+            return response()->json(['message' => 'Jaza nafasi zote zilizo wazi.'], 401);
+        }
+        
+        $user = User::query()->where("username", $user)->first();
+
+        if ($user) {
+            $credentials["password"] = bcrypt($password);
+            if ($user && Hash::check($request->input('password'), $user->password)) {
+                // Password matches, do something (e.g., log in the user)
+                $token = $user->createToken('main')->plainTextToken;
+                return response((compact('user', 'token')));
+            } else {
+                // Invalid username or password
+                return response()->json(['message' => 'Umekosea jina au password'], 401);
+            }
+        }else{
+            return response()->json(['message' => 'Tumia jina au password halisi'], 401);
         }
 
     }
     public function signup(SignupRequest $request)
     {
-        $data = $request->validated();
+      
+        $office = $request->office;
+            $username = $request->username;
+            $password = $request->password;
+            $role = $request->role;
+           $active = $request->active;
+        $mobile = $request->mobile;
 
-        $user = User::create([
-            'office' => $data['office'],
-            'username' => $data['username'],
-            'password' => bcrypt($data['password']),
-            'mobile' => bcrypt($data['mobile']),
-        ]);
+        if (empty($username) || empty($password) || empty($role) || empty($mobile)|| empty($office)) {
+            return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
+        } else {
+            $user = User::query()->where("username", $username)->first();
+            if (!$user) {
+                $user = User::create([
+                    'office' => $request->office,
+                    'username' => $request->username,
+                    'password' => $request->password,
+                    'role' => $request->role,
+                    'active' => $request->active,
+                    'mobile' => $request->mobile,
+                ]);
 
-        $token = $user->createToken('main')->plainTextToken;
-
-        return response((compact('user', 'token')));
+                return response()->json(['message' => 'Akaunti Imetengenezwa'], 200);
+            } else {
+                return response()->json(['message' => 'Tayari jina limeshasajiliwa.'], 401);
+            }
+        }
     }
     public function logout(Request $request)
     {
         $user = $request->user();
         $user->currentAccessToken()->delete();
 
-        return response()->json(['message'=> ''],204);
+        return response()->json(['message'=> 'logout'],200);
     }
 }
