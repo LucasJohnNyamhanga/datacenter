@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('kazi');
             $table->string('picha');
             $table->timestamps();
-            $table->foreignId('offices_id');
-            $table->foreign('offices_id')->references('id')->on('offices')->onDelete('cascade');
-            $table->foreignId('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('office_id');
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

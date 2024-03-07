@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('aina');
             $table->integer('kiasi');
+            $table->boolean('hali')->default(false);
+            $table->boolean('kasoro')->default(false);
+            $table->boolean('njeMuda')->default(false);
+            $table->string('maelezo');
             $table->timestamps();
-            $table->foreignId('customers_id');
-            $table->foreign('customers_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreignId('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      */

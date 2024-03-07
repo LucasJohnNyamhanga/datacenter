@@ -11,34 +11,42 @@ use App\Models\Customer;
 use App\Models\Matumizi;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-     public function user(){
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(Office::class);
     }
 
-    public function customer(){
+    public function customer():HasMany
+    {
         return $this->hasMany(Customer::class);
     }
 
-    public function faini(){
+    public function faini():HasMany
+    {
         return $this->hasMany(Faini::class);
     }
 
-    public function rejesho(){
+    public function rejesho():HasMany
+    {
         return $this->hasMany(Rejesho::class);
     }
 
-    public function matumizi(){
+    public function matumizi():HasMany
+    {
         return $this->hasMany(Matumizi::class);
     }
 
-    public function mapato(){
+    public function mapato():HasMany
+    {
         return $this->hasMany(Mapato::class);
     }
 

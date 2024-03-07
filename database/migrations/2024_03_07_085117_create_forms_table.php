@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('forms', function (Blueprint $table) {
             $table->id();
-            $table->string('kiasi');
+            $table->integer('kiasi');
             $table->timestamps();
-            $table->foreignId('loans_id');
-            $table->foreign('loans_id')->references('id')->on('loans')->onDelete('cascade');
+            $table->foreignId('loan_id');
+            $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
         });
     }
 

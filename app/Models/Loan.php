@@ -15,33 +15,43 @@ class Loan extends Model
 {
     use HasFactory;
 
-    public function customer(){
+    public function customer()
+    {
         return $this->belongsTo(Customer::class);
     }
 
-    public function dhamana(){
+    public function dhamana()
+    {
         return $this->hasMany(Dhamana::class);
     }
 
-    public function mdhamini(){
+    public function mdhamini()
+    {
         return $this->hasMany(Mdhamini::class);
     }
 
-    public function rejesho(){
+    public function rejesho()
+    {
         return $this->hasMany(Rejesho::class);
     }
 
-    public function faini(){
+    public function faini()
+    {
         return $this->hasMany(Faini::class);
     }
 
-    public function form(){
+    public function form()
+    {
         return $this->hasOne(Form::class);
     }
 
     protected $fillable = [
         'aina',
         'kiasi',
-        'customers_id'
+        'customers_id',
+        'hali',
+        'kasoro',
+        'maelezo',
+        'njeMuda',
     ];
 }

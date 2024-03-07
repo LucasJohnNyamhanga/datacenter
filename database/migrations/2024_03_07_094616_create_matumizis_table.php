@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('matumizis', function (Blueprint $table) {
             $table->id();
-            $table->string('kiasi');
+            $table->integer('kiasi');
             $table->string('njia');
             $table->string('aina');
             $table->string('maelezo');
             $table->timestamps();
-            $table->foreignId('offices_id');
-            $table->foreign('offices_id')->references('id')->on('offices')->onDelete('cascade');
-            $table->foreignId('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('office_id');
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

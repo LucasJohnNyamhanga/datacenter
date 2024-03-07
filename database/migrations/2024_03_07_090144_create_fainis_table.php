@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('fainis', function (Blueprint $table) {
             $table->id();
-            $table->string('kiasi');
+            $table->integer('kiasi');
             $table->timestamps();
-            $table->foreignId('loans_id');
-            $table->foreign('loans_id')->references('id')->on('loans')->onDelete('cascade');
-            $table->foreignId('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('loan_id');
+            $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
