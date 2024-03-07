@@ -3,14 +3,44 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Faini;
+use App\Models\Mapato;
+use App\Models\Office;
+use App\Models\Rejesho;
+use App\Models\Customer;
+use App\Models\Matumizi;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+     public function user(){
+        return $this->belongsTo(Office::class);
+    }
+
+    public function customer(){
+        return $this->hasMany(Customer::class);
+    }
+
+    public function faini(){
+        return $this->hasMany(Faini::class);
+    }
+
+    public function rejesho(){
+        return $this->hasMany(Rejesho::class);
+    }
+
+    public function matumizi(){
+        return $this->hasMany(Matumizi::class);
+    }
+
+    public function mapato(){
+        return $this->hasMany(Mapato::class);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +53,8 @@ class User extends Authenticatable
         'username',
         'password',
         'active',
-        'role'
+        'role',
+        'offices_id'
     ];
 
     /**
@@ -43,6 +74,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         
-        'password' => 'hashed',
+        //'password' => 'hashed',
     ];
 }

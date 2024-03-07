@@ -7,25 +7,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 use Validator;
 
 class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        $user = $request->username;
+        $username = $request->username;
         $password = $request->password;
 
-        if (empty($user) || empty($password)) {
+        if (empty($username) || empty($password)) {
             return response()->json(['message' => 'Jaza nafasi zote zilizo wazi.'], 401);
         }
         
-        $user = User::query()->where("username", $user)->first();
+        $user = User::query()->where("username", $username)->first();
 
         if ($user) {
-            $credentials["password"] = bcrypt($password);
-            if ($user && Hash::check($request->input('password'), $user->password)) {
+            $passwordDatabase = $user->password;
+            if ($password == $passwordDatabase) {
                 // Password matches, do something (e.g., log in the user)
                 $token = $user->createToken('main')->plainTextToken;
                 return response((compact('user', 'token')));
@@ -40,39 +42,66 @@ class AuthController extends Controller
     }
     public function signup(SignupRequest $request)
     {
-      
         $office = $request->office;
-            $username = $request->username;
-            $password = $request->password;
-            $role = $request->role;
-           $active = $request->active;
+        $username = $request->username;
+        $password = $request->password;
+        $retypePassword = $request->retypePassword;
         $mobile = $request->mobile;
 
-        if (empty($username) || empty($password) || empty($role) || empty($mobile)|| empty($office)) {
+
+        if (empty($username) || empty($password) || empty($retypePassword) || empty($mobile)|| empty($office)) {
             return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
         } else {
-            $user = User::query()->where("username", $username)->first();
-            if (!$user) {
-                $user = User::create([
-                    'office' => $request->office,
-                    'username' => $request->username,
-                    'password' => $request->password,
-                    'role' => $request->role,
-                    'active' => $request->active,
-                    'mobile' => $request->mobile,
-                ]);
 
-                return response()->json(['message' => 'Akaunti Imetengenezwa'], 200);
-            } else {
-                return response()->json(['message' => 'Tayari jina limeshasajiliwa.'], 401);
+            if ($password == $retypePassword) {
+                $user = User::query()->where("username", $username)->first();
+                
+                if (!$user) {
+                    $user = User::create([
+                        'office' => $office,
+                        'username' => $username,
+                        'password' => $password,
+                        'role' => 'normal',
+                        'active' => 0,
+                        'mobile' => $mobile,
+                    ]);
+
+                    return response()->json(['message' => 'Akaunti Imetengenezwa'], 200);
+                } else {
+                    return response()->json(['message' => 'Tayari jina limeshasajiliwa.'], 401);
+                }
+            }else{
+                return response()->json(['message' => 'Maneno ya siri hayafanani'], 401);
             }
         }
     }
+
     public function logout(Request $request)
     {
         $user = $request->user();
         $user->currentAccessToken()->delete();
 
         return response()->json(['message'=> 'logout'],200);
+    }
+
+
+      public function user(UserRequest $request)
+    {
+        $tokenUser = $request->token;
+
+        if (empty($token)) {
+            return response()->json(['message' => 'Token iko wazi'], 401);
+        } else {
+
+            $token = PersonalAccessToken::findToken($tokenUser);
+            $user = $token->tokenable;
+
+            if (!$user) {
+                return response((compact('user')));
+            } else {
+                return response()->json(['message' => 'Hakuna mtumiaji aliyepatikana'], 401);
+            }
+        }
+        
     }
 }
