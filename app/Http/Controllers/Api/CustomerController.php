@@ -37,11 +37,12 @@ class CustomerController extends Controller
                         'simu' => $simu,
                         'kazi' => $kazi,
                         'picha' => $picha,
-                        'offices_id' => $offices_id,
-                        'users_id' => $users_id,
+                        'office_id' => $offices_id,
+                        'user_id' => $users_id,
                     ]);
 
                     return response()->json(['message' => 'Akaunti Imetengenezwa'], 200);
+                    
                 } else {
                     return response()->json(['message' => 'Tayari jina limeshasajiliwa.'], 401);
                 }

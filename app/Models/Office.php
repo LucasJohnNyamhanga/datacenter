@@ -14,10 +14,6 @@ class Office extends Model
 {
     use HasFactory;
 
-    public function user():HasMany
-    {
-        return $this->hasMany(User::class);
-    }
 
     public function customer():HasMany
     {

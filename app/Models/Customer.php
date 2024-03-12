@@ -37,8 +37,8 @@ class Customer extends Model
         'simu',
         'kazi',
         'picha',
-        'offices_id',
-        'users_id',
+        'office_id',
+        'user_id',
     ];
 
 }

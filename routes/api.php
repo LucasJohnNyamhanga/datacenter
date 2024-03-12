@@ -13,13 +13,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::post("upload", [UploadController::class, 'upload']);
+    Route::post('logout', [AuthController::class, 'logout']); 
     Route::post('storeCustomer', [CustomerController::class, 'storeCustomer']);
     Route::post('storeOffice', [OfficeController::class, 'storeOffice']);
     Route::post('storeLoan', [LoanController::class, 'storeLoan']);
+    Route::post("upload", [UploadController::class, 'upload']);
 });
 
 
 Route::post('signup', [AuthController::class, 'signup']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('getOffice', [OfficeController::class, 'getOffice']);

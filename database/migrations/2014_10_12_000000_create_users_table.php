@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreignId('office_id');
-            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
         });
     }
 

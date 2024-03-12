@@ -8,6 +8,26 @@ use App\Models\Office;
 
 class OfficeController extends Controller
 {
+
+    public function getOffice()
+    {
+    $office = Office::all();
+            
+        if($office -> count() > 0){
+            $data = [
+                        'status' => 200,
+                        'data' => $office
+                    ];
+            return response()->json($data, 200);
+        }else{
+            $data = [
+            'status' => 404,
+            'data' => 'Hakuna ofisi iliyopatikana!.'
+        ];
+            return response()->json($data, 404);
+        }
+        
+    }
     public function storeOffice(StoreofficeRequest $request){
 
         $jina = $request->jina;

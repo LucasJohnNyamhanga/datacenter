@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\OfficeIdRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Office;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
 use Validator;
@@ -62,7 +64,7 @@ class AuthController extends Controller
                         'username' => $username,
                         'password' => $password,
                         'role' => 'normal',
-                        'active' => 0,
+                        'active' => false,
                         'mobile' => $mobile,
                     ]);
 

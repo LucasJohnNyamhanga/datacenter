@@ -62,7 +62,7 @@ class User extends Authenticatable
         'password',
         'active',
         'role',
-        'offices_id'
+        'office'
     ];
 
     /**

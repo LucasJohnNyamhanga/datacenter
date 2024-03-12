@@ -15,7 +15,8 @@ class UploadController extends Controller
             $imagePath = public_path('uploads/microcredit/images/');
             $new_name = rand() . $image->getClientOriginalName();
             $image->move($imagePath, $new_name);
-            return response()->json('https://database.co.tz/uploads/imani/images/' . $new_name);
+            //return response()->json('https://database.co.tz/uploads/imani/images/' . $new_name);
+            return response()->json(['message' => 'https://database.co.tz/uploads/imani/images/' . $new_name], 200);
         } else {
             return response()->json('null');
         }
