@@ -26,6 +26,9 @@ class AuthController extends Controller
         }
         
         $user = User::query()->where("username", $username)->first();
+        
+
+        
 
         if ($user) {
             $passwordDatabase = $user->password;

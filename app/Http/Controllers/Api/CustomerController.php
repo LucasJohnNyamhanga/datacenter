@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetNewCustomerRequest;
 use App\Http\Requests\StorecustomerRequest;
 use App\Models\Customer;
 
@@ -24,8 +25,6 @@ class CustomerController extends Controller
         if (empty($jina) || empty($jinaMaarufu) || empty($jinsia) || empty($anapoishi)|| empty($simu)|| empty($kazi)|| empty($picha)|| empty($offices_id)|| empty($users_id)) {
             return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
         } else {
-
-           
                 $customer = Customer::query()->where("jina", $jina)->first();
                 
                 if (!$customer) {
@@ -41,13 +40,19 @@ class CustomerController extends Controller
                         'user_id' => $users_id,
                     ]);
 
-                    return response()->json(['message' => 'Akaunti Imetengenezwa'], 200);
-                    
+                    $id = $customer->id;
+                    return response()->json(['message' => $id], 200);
                 } else {
                     return response()->json(['message' => 'Tayari jina limeshasajiliwa.'], 401);
                 }
-           
         }
-
     }
+
+    public function getNewCustomer(GetNewCustomerRequest $request)
+    {
+        $customer = Customer::with('loan')->whereRelation('loan', 'mpya', '=', true)->paginate(10);
+        return response()->json($customer, 200);
+    }
+
+    
 }

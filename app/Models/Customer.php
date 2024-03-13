@@ -8,7 +8,7 @@ use App\Models\Office;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
@@ -24,9 +24,9 @@ class Customer extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function loan():HasOne
+    public function loan():HasMany
     {
-        return $this->hasOne(Loan::class);
+        return $this->hasMany(Loan::class);
     }
 
     protected $fillable = [

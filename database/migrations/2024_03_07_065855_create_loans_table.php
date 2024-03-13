@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->string('aina');
+            $table->integer('siku');
             $table->integer('kiasi');
+            $table->boolean('mpya')->default(true);
             $table->boolean('hali')->default(false);
             $table->boolean('kasoro')->default(false);
             $table->boolean('njeMuda')->default(false);

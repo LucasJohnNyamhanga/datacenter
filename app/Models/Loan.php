@@ -46,12 +46,13 @@ class Loan extends Model
     }
 
     protected $fillable = [
-        'aina',
+        'siku',
         'kiasi',
-        'customers_id',
+        'customer_id',
         'hali',
         'kasoro',
         'maelezo',
         'njeMuda',
+        'mpya'
     ];
 }

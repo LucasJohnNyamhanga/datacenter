@@ -18,9 +18,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('storeOffice', [OfficeController::class, 'storeOffice']);
     Route::post('storeLoan', [LoanController::class, 'storeLoan']);
     Route::post("upload", [UploadController::class, 'upload']);
+    Route::post('signup', [AuthController::class, 'signup']);
+    Route::get('getNewCustomer', [CustomerController::class, 'getNewCustomer']);
 });
 
-
-Route::post('signup', [AuthController::class, 'signup']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('getOffice', [OfficeController::class, 'getOffice']);
