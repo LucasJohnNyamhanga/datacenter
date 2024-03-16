@@ -21,6 +21,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('loan_id');
             $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
+            $table->foreignId('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

@@ -16,11 +16,17 @@ class Dhamana extends Model
         return $this->belongsTo(Loan::class);
     }
 
+    public function customer():BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     protected $fillable = [
         'thamani',
         'maelezo',
         'loans_id',
         'picha',
+        'customer_id'
     ];
 
 }

@@ -3,49 +3,54 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteRequest;
 use App\Http\Requests\StoremdhaminiRequest;
-use Illuminate\Http\Request;
+use App\Models\Mdhamini;
 
 class MdhaminiController extends Controller
 {
-    public function storeCustomer(StoremdhaminiRequest $request){
-
+    public function storeMdhamini(StoremdhaminiRequest $request)
+    {
         $jina = $request->jina;
-        $jinaMaarufu = $request->jinaMaarufu;
-        $jinsia = $request->jinsia;
-        $anapoishi = $request->anapoishi;
         $simu = $request->simu;
-        $kazi = $request->kazi;
+        $mahusiano = $request->mahusiano;
+        $anapoishi = $request->anapoishi;
         $picha = $request->picha;
-        $offices_id = $request->officeId;
-        $users_id = $request->userId;
+        $loans_id = $request->loansId;
+        $customer_id = $request->customerId;
 
-        if (empty($jina) || empty($jinaMaarufu) || empty($jinsia) || empty($anapoishi)|| empty($simu)|| empty($kazi)|| empty($picha)|| empty($offices_id)|| empty($users_id)) {
-            return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
+        $mdhaminiCheck = Mdhamini::query()->where("jina", $jina)->first();
+
+        if (!$mdhaminiCheck) {
+            $mdhamini = Mdhamini::create([
+                'jina' => $jina,
+                'simu' => $simu,
+                'mahusiano' => $mahusiano,
+                'anapoishi' => $anapoishi,
+                'picha' => $picha,
+                'loan_id' => $loans_id,
+                'customer_id' => $customer_id,
+            ]);
+
+            return response()->json(['message' => 'Mdhamini Kasajiliwa'], 200);
         } else {
-
-           
-                // $customer = Customer::query()->where("jina", $jina)->first();
-                
-                // if (!$customer) {
-                //     // $customer = Customer::create([
-                //     //     'jina' => $jina,
-                //     //     'jinaMaarufu' => $jinaMaarufu,
-                //     //     'jinsia' => $jinsia,
-                //     //     'anapoishi' => $anapoishi,
-                //     //     'simu' => $simu,
-                //     //     'kazi' => $kazi,
-                //     //     'picha' => $picha,
-                //     //     'offices_id' => $offices_id,
-                //     //     'users_id' => $users_id,
-                //     // ]);
-
-                //     return response()->json(['message' => 'Akaunti Imetengenezwa'], 200);
-                // } else {
-                //     return response()->json(['message' => 'Tayari jina limeshasajiliwa.'], 401);
-                // }
-           
+            return response()->json(['message' => 'Tayari jina La Mdhamini Limeshasajiliwa.'], 401);
         }
 
+    }
+
+
+
+    public function deleteMdhamini(DeleteRequest $request)
+    {
+        $id = $request->id;
+        $record = Mdhamini::find($id); 
+
+        if ($record) {
+            $record->delete();
+            return response()->json(['message' => 'Mdhamini Kafutwa'], 200);
+        }else {
+            return response()->json(['message' => 'Mdhamini ameshindwa kupatikana.'], 401);
+        }
     }
 }

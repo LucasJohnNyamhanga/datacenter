@@ -29,6 +29,16 @@ class Customer extends Model
         return $this->hasMany(Loan::class);
     }
 
+    public function mdhamini():HasMany
+    {
+        return $this->hasMany(Mdhamini::class);
+    }
+
+    public function dhamana():HasMany
+    {
+        return $this->hasMany(Dhamana::class);
+    }
+
     protected $fillable = [
         'jina',
         'jinaMaarufu',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetNewCustomerRequest;
+use App\Http\Requests\MtejaDetailRequest;
 use App\Http\Requests\StorecustomerRequest;
 use App\Models\Customer;
 
@@ -52,6 +53,17 @@ class CustomerController extends Controller
     {
         $customer = Customer::with('loan')->whereRelation('loan', 'mpya', '=', true)->paginate(10);
         return response()->json($customer, 200);
+    }
+
+     public function getNewCustomerDetails(MtejaDetailRequest $request)
+    {
+        $id = $request->id;
+        $customer = Customer::with(['loan','mdhamini','dhamana'])->where('id','=',$id)->whereRelation('loan', 'mpya', '=', true)->first();
+
+       
+       
+            return response()->json(['message' => $customer], 200);
+       
     }
 
     

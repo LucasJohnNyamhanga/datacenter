@@ -16,13 +16,19 @@ class Mdhamini extends Model
         return $this->belongsTo(Loan::class);
     }
 
+    public function customer():BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     protected $fillable = [
         'jina',
         'simu',
         'mahusiano',
         'anapoishi',
         'picha',
-        'loans_id',
+        'loan_id',
+        'customer_id'
     ];
 
 }
