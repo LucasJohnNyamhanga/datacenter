@@ -19,22 +19,27 @@ class MdhaminiController extends Controller
         $loans_id = $request->loansId;
         $customer_id = $request->customerId;
 
-        $mdhaminiCheck = Mdhamini::query()->where("jina", $jina)->first();
-
-        if (!$mdhaminiCheck) {
-            $mdhamini = Mdhamini::create([
-                'jina' => $jina,
-                'simu' => $simu,
-                'mahusiano' => $mahusiano,
-                'anapoishi' => $anapoishi,
-                'picha' => $picha,
-                'loan_id' => $loans_id,
-                'customer_id' => $customer_id,
-            ]);
-
-            return response()->json(['message' => 'Mdhamini Kasajiliwa'], 200);
+        if (empty($jina) || empty($mahusiano) || empty($anapoishi) || empty($picha)) {
+            return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
         } else {
-            return response()->json(['message' => 'Tayari jina La Mdhamini Limeshasajiliwa.'], 401);
+
+            $mdhaminiCheck = Mdhamini::query()->where("jina", $jina)->first();
+
+            if (!$mdhaminiCheck) {
+                $mdhamini = Mdhamini::create([
+                    'jina' => $jina,
+                    'simu' => $simu,
+                    'mahusiano' => $mahusiano,
+                    'anapoishi' => $anapoishi,
+                    'picha' => $picha,
+                    'loan_id' => $loans_id,
+                    'customer_id' => $customer_id,
+                ]);
+
+                return response()->json(['message' => 'Mdhamini Kasajiliwa'], 200);
+            } else {
+                return response()->json(['message' => 'Tayari jina La Mdhamini Limeshasajiliwa.'], 401);
+            }
         }
 
     }
@@ -45,12 +50,19 @@ class MdhaminiController extends Controller
     {
         $id = $request->id;
         $record = Mdhamini::find($id); 
-
         if ($record) {
-            $record->delete();
-            return response()->json(['message' => 'Mdhamini Kafutwa'], 200);
-        }else {
-            return response()->json(['message' => 'Mdhamini ameshindwa kupatikana.'], 401);
+            $imagePath = $record->picha;
+            $filePathImage = trim(str_replace('https://database.co.tz/','',$imagePath));
+            $filePath = public_path($filePathImage);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+                $record->delete();
+                return response()->json(['message' => 'Dhamana Imefutwa'], 200);
+            }else {
+                return response()->json(['message' => 'Dhamana imeshindikana kupatikana.'], 401);
+            }
+        } else {
+            echo "File does not exist.";
         }
     }
 }

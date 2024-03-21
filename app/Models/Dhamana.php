@@ -22,9 +22,10 @@ class Dhamana extends Model
     }
 
     protected $fillable = [
+        'jina',
         'thamani',
         'maelezo',
-        'loans_id',
+        'loan_id',
         'picha',
         'customer_id'
     ];

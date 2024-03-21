@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LoanController;
 use App\Http\Controllers\Api\OfficeController;
 use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Api\DhamanaController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MdhaminiController;
 
@@ -23,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('getNewCustomerDetails', [CustomerController::class, 'getNewCustomerDetails']);
     Route::post('storeMdhamini', [MdhaminiController::class, 'storeMdhamini']);
     Route::post('deleteMdhamini', [MdhaminiController::class, 'deleteMdhamini']);
+    Route::post('storeDhamana', [DhamanaController::class, 'storeDhamana']);
+    Route::post('deleteDhamana', [DhamanaController::class, 'deleteDhamana']);
 });
 
 Route::post('login', [AuthController::class, 'login']);
