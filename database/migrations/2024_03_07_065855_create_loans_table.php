@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('kasoro')->default(false);
             $table->boolean('njeMuda')->default(false);
             $table->string('maelezo');
+            $table->dateTime('mwanzoMkopo')->nullable();
             $table->timestamps();
             $table->foreignId('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');

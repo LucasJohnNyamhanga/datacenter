@@ -90,23 +90,23 @@ class AuthController extends Controller
     }
 
 
-      public function user(UserRequest $request)
-    {
-        $tokenUser = $request->token;
+    //   public function user(UserRequest $request)
+    // {
+    //     $tokenUser = $request->token;
 
-        if (empty($token)) {
-            return response()->json(['message' => 'Token iko wazi'], 401);
-        } else {
+    //     if (empty($token)) {
+    //         return response()->json(['message' => 'Token iko wazi'], 401);
+    //     } else {
 
-            $token = PersonalAccessToken::findToken($tokenUser);
-            $user = $token->tokenable;
+    //         $token = PersonalAccessToken::findToken($tokenUser);
+    //         $user = $token->tokenable;
 
-            if (!$user) {
-                return response((compact('user')));
-            } else {
-                return response()->json(['message' => 'Hakuna mtumiaji aliyepatikana'], 401);
-            }
-        }
+    //         if (!$user) {
+    //             return response((compact('user')));
+    //         } else {
+    //             return response()->json(['message' => 'Hakuna mtumiaji aliyepatikana'], 401);
+    //         }
+    //     }
         
-    }
+    // }
 }
