@@ -24,11 +24,10 @@ class AuthController extends Controller
         if (empty($username) || empty($password)) {
             return response()->json(['message' => 'Jaza nafasi zote zilizo wazi.'], 401);
         }
-        
-        $user = User::query()->where("username", $username)->first();
-        
 
+       
         
+        $user = User::where("username", $username)->first();
 
         if ($user) {
             $passwordDatabase = $user->password;
@@ -43,6 +42,7 @@ class AuthController extends Controller
         }else{
             return response()->json(['message' => 'Tumia jina au password halisi'], 401);
         }
+    
 
     }
     public function signup(SignupRequest $request)
@@ -89,24 +89,13 @@ class AuthController extends Controller
         return response()->json(['message'=> 'logout'],200);
     }
 
-
-    //   public function user(UserRequest $request)
-    // {
-    //     $tokenUser = $request->token;
-
-    //     if (empty($token)) {
-    //         return response()->json(['message' => 'Token iko wazi'], 401);
-    //     } else {
-
-    //         $token = PersonalAccessToken::findToken($tokenUser);
-    //         $user = $token->tokenable;
-
-    //         if (!$user) {
-    //             return response((compact('user')));
-    //         } else {
-    //             return response()->json(['message' => 'Hakuna mtumiaji aliyepatikana'], 401);
-    //         }
-    //     }
-        
-    // }
+    public function getUsers()
+        {
+            $users = User::where('active', 1)->get();
+            if ($users) {
+                return response((compact('users')));
+            } else {
+                return response()->json(['message' => 'Hakuna mtumiaji aliyepatikana'], 401);
+            }
+    }
 }

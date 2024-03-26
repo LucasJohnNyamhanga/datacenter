@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('office');
             $table->string('mobile');
             $table->string('username')->unique();
-            $table->boolean('active')->default(false);
+            $table->boolean('active')->default(true);
             $table->string('role')->default('normal');
             $table->string('password');
             $table->rememberToken();

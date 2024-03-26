@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\KasoroRequest;
 use App\Http\Requests\StoreloanRequest;
 use App\Models\Loan;
 
@@ -25,9 +26,22 @@ class LoanController extends Controller
             'njeMuda' => false,
             'mpya' => true,
         ]);
-
         
             return response()->json(['message' => 'Mkopo Umesajiliwa'], 200);
-       
+    }
+
+    public function wekaKasoroMkopo(KasoroRequest $request)
+    {
+        $id = $request->id;
+        $maelezo = $request->maelezo;
+
+        $loan = Loan::find($id);
+        $loan->maelezo = $maelezo;
+        $loan->kasoro = true;
+        $loan->mpya = false;
+    
+        $loan->save();
+
+        return response()->json(['message' => 'Kasoro imewekwa kwenye Mkopo'], 200);
     }
 }

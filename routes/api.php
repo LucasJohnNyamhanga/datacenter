@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('deleteMdhamini', [MdhaminiController::class, 'deleteMdhamini']);
     Route::post('storeDhamana', [DhamanaController::class, 'storeDhamana']);
     Route::post('deleteDhamana', [DhamanaController::class, 'deleteDhamana']);
+    Route::get('getUsers', [AuthController::class, 'getUsers']);
+    Route::post('wekaKasoroMkopo', [LoanController::class, 'wekaKasoroMkopo']);
 });
 
 Route::post('login', [AuthController::class, 'login']);
