@@ -85,6 +85,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('getBakiSalio', [RejeshoController::class, 'getBakiSalio']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('rekebishaCustomer', [CustomerController::class, 'rekebishaCustomer']);
+    Route::get('getMatumiziWithTwoDate', [MatumiziController::class, 'getMatumiziWithTwoDate']);
+    Route::get('getMapatoWithTwoDate', [MapatoController::class, 'getMapatoWithTwoDate']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

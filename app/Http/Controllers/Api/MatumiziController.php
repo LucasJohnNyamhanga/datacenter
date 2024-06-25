@@ -19,6 +19,7 @@ class MatumiziController extends Controller
         $maelezo = $request->maelezo;
         $officeId = $request->officeId;
         $userId = $request->userId;
+        $isSystem = $request->isSystem;
 
         if (empty($kiasi) || empty($njia) || empty($aina) || empty($maelezo)) {
             return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
@@ -31,6 +32,7 @@ class MatumiziController extends Controller
                     'maelezo' => $maelezo,
                     'office_id' => $officeId,
                     'user_id' => $userId,
+                    'isSystem'=> $isSystem,
                 ]);
                 return response()->json(['message' => 'Matumizi Yamesajiliwa'], 200);
         
@@ -58,6 +60,20 @@ class MatumiziController extends Controller
         ->get();
         return response()->json(['data' => $matumizi], 200);
     }
+
+    public function getMatumiziWithTwoDate(MatumiziRequest $request)
+    {
+        $officeId = $request->officeId;
+        $dateStart = Carbon::parse($request->dateStart);
+        $dateEnd = Carbon::parse($request->dateEnd);
+
+        $matumizi = Matumizi::whereBetween('created_at', [$dateStart, $dateEnd])
+            ->where('office_id', '=', $officeId)
+            ->get();
+
+        return response()->json(['data' => $matumizi], 200);
+    }
+
 
     public function sahihishaMatumizi(MatumiziRequest $request)
     {

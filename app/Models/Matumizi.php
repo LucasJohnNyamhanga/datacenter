@@ -35,6 +35,7 @@ class Matumizi extends Model
         'maelezoCopy',
         'futa',
         'badili',
+        'isSystem'
     ];
 
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('maelezo');
             $table->string('maelezoCopy')->nullable();
             $table->boolean('futa')->default(false);
+            $table->boolean('isSystem')->default(false);
             $table->boolean('badili')->default(false);
             $table->timestamps();
             $table->foreignId('office_id');

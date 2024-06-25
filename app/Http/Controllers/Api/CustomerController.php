@@ -209,7 +209,6 @@ class CustomerController extends Controller
                         ->orWhere('simu', 'LIKE', '%' . $jina . '%');
                 });
             })
-            
             ->get();
 
         return response()->json(['data' => $customers], 200);

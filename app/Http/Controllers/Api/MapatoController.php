@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MapatoRequest;
 use App\Http\Requests\StoremapatoRequest;
+use App\Models\Faini;
 use App\Models\Mapato;
+use App\Models\Rejesho;
 use Carbon\Carbon;
 
 class MapatoController extends Controller
@@ -104,6 +106,17 @@ class MapatoController extends Controller
         $id = $request->id;
 
         $mapato = Mapato::find($id);
+
+        if($mapato->aina == 'Rejesho'){
+            $rejesho = Rejesho::find($mapato->rejeshoId);
+            $rejesho->delete();
+        }
+
+        if($mapato->aina == 'Faini'){
+            $faini = Faini::find($mapato->rejeshoId);
+            $faini->delete();
+        }
+
         $mapato->delete();
 
         return response()->json(['message' => 'Tumizi  Limefutwa'], 200);
@@ -139,6 +152,20 @@ class MapatoController extends Controller
         $ainaCopy = $mapato->ainaCopy;
         $maelezoCopy = $mapato->maelezoCopy;
 
+        //rekebisha faini
+        //rekebisha rejesho
+        if($mapato->aina == 'Rejesho'){
+            $rejesho = Rejesho::find($mapato->rejeshoId);
+            $rejesho->kiasi = $kiasiCopy;
+            $rejesho->save();
+        }
+
+        if($mapato->aina == 'Faini'){
+            $faini = Faini::find($mapato->rejeshoId);
+            $faini->kiasi = $kiasiCopy;
+            $faini->save();
+        }
+
         $mapato->kiasi = $kiasiCopy;
         $mapato->njia = $njiaCopy;
         $mapato->aina = $ainaCopy;
@@ -154,5 +181,18 @@ class MapatoController extends Controller
         $mapato->save();
 
         return response()->json(['message' => 'Tumizi  Limehairishwa kufanyiwa mabadiliko.'], 200);
+    }
+
+    public function getMapatoWithTwoDate(MapatoRequest $request)
+    {
+        $officeId = $request->officeId;
+        $dateStart = Carbon::parse($request->dateStart);
+        $dateEnd = Carbon::parse($request->dateEnd);
+
+        $mapato = Mapato::whereBetween('created_at', [$dateStart, $dateEnd])
+            ->where('office_id', '=', $officeId)
+            ->get();
+
+        return response()->json(['data' => $mapato], 200);
     }
 }
