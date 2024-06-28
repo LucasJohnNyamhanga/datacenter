@@ -53,23 +53,38 @@ class MatumiziController extends Controller
 
     public function getMatumiziWithDate(MatumiziRequest $request){
         $officeId = $request->officeId;
+        $filter = $request->filter;
         $tarehe = Carbon::parse($request->tarehe);
 
-        $matumizi = Matumizi::whereDay('created_at', $tarehe)
-        ->where('office_id','=',$officeId)
-        ->get();
+        if ($filter == 'Yote') {
+            $matumizi = Matumizi::whereDay('created_at', $tarehe)
+                ->where('office_id', '=', $officeId)
+                ->get();
+        }else{
+            $matumizi = Matumizi::whereDay('created_at', $tarehe)
+                ->where('office_id', '=', $officeId)
+                ->where('aina', '=', $filter)
+                ->get();
+        }
         return response()->json(['data' => $matumizi], 200);
     }
 
     public function getMatumiziWithTwoDate(MatumiziRequest $request)
     {
         $officeId = $request->officeId;
+        $filter = $request->filter;
         $dateStart = Carbon::parse($request->dateStart);
         $dateEnd = Carbon::parse($request->dateEnd);
-
-        $matumizi = Matumizi::whereBetween('created_at', [$dateStart, $dateEnd])
-            ->where('office_id', '=', $officeId)
-            ->get();
+        if ($filter == 'Yote') {
+            $matumizi = Matumizi::whereBetween('created_at', [$dateStart, $dateEnd])
+                ->where('office_id', '=', $officeId)
+                ->get();
+        }else{
+            $matumizi = Matumizi::whereBetween('created_at', [$dateStart, $dateEnd])
+                ->where('office_id', '=', $officeId)
+                ->where('aina', '=', $filter)
+                ->get();
+        }
 
         return response()->json(['data' => $matumizi], 200);
     }

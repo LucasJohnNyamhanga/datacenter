@@ -56,11 +56,19 @@ class MapatoController extends Controller
 
     public function getMapatoWithDate(MapatoRequest $request){
         $officeId = $request->officeId;
+        $filter = $request->filter;
         $tarehe = Carbon::parse($request->tarehe);
 
-        $mapato = Mapato::whereDay('created_at', $tarehe)
-        ->where('office_id','=',$officeId)
-        ->get();
+        if ($filter == 'Yote') {
+            $mapato = Mapato::whereDay('created_at', $tarehe)
+                ->where('office_id', '=', $officeId)
+                ->get();
+        }else{
+            $mapato = Mapato::whereDay('created_at', $tarehe)
+                ->where('office_id', '=', $officeId)
+                ->where('aina', '=', $filter)
+                ->get();
+        }
         return response()->json(['data' => $mapato], 200);
     }
 
@@ -186,12 +194,22 @@ class MapatoController extends Controller
     public function getMapatoWithTwoDate(MapatoRequest $request)
     {
         $officeId = $request->officeId;
+        $filter = $request->filter;
         $dateStart = Carbon::parse($request->dateStart);
         $dateEnd = Carbon::parse($request->dateEnd);
 
-        $mapato = Mapato::whereBetween('created_at', [$dateStart, $dateEnd])
+        if($filter == 'Yote'){
+            $mapato = Mapato::whereBetween('created_at', [$dateStart, $dateEnd])
+                        ->where('office_id', '=', $officeId)
+                        ->get();
+        }else{
+            $mapato = Mapato::whereBetween('created_at', [$dateStart, $dateEnd])
             ->where('office_id', '=', $officeId)
+            ->where('aina', '=', $filter)
             ->get();
+        }
+
+        
 
         return response()->json(['data' => $mapato], 200);
     }
