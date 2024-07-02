@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('storeHesabuKuu', [BalanceController::class, 'storeHesabuKuu']);
     Route::get('getMahesabu', [BalanceController::class, 'getMahesabu']);
     Route::get('getMahesabuWithDate', [BalanceController::class, 'getMahesabuWithDate']);
+    Route::get('getMahesabuWithTwoDates', [BalanceController::class, 'getMahesabuWithTwoDates']);
     Route::post('sahihishaMatumizi', [MatumiziController::class, 'sahihishaMatumizi']);
     Route::post('futaMatumizi', [MatumiziController::class, 'futaMatumizi']);
     Route::post('sahihishaMapato', [MapatoController::class, 'sahihishaMapato']);

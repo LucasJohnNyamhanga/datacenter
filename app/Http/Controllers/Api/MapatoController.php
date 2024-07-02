@@ -195,8 +195,8 @@ class MapatoController extends Controller
     {
         $officeId = $request->officeId;
         $filter = $request->filter;
-        $dateStart = Carbon::parse($request->dateStart);
-        $dateEnd = Carbon::parse($request->dateEnd);
+        $dateStart = Carbon::parse($request->dateStart)->startOfDay();
+        $dateEnd = Carbon::parse($request->dateEnd)->endOfDay();
 
         if($filter == 'Yote'){
             $mapato = Mapato::whereBetween('created_at', [$dateStart, $dateEnd])

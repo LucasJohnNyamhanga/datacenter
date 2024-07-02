@@ -53,7 +53,7 @@ class BalanceController extends Controller
                 'tareheHesabuIliyopita' => $tareheHesabuIliyopita,
                 'hesabuIliyopita' => $hesabuIliyopita,
             ]);
-        return response()->json(['message' => 'hesabu imsesajiliwa.'], 200);
+        return response()->json(['message' => 'hesabu imesajiliwa.'], 200);
         } 
         
         if (!$balance) {
@@ -173,6 +173,75 @@ class BalanceController extends Controller
         $time = Carbon::now();
         return response()->json(['hesabu' => $latestBalance, 'muda' => $time, 'ndaniHesabu' => $officeNdaniHesabu,  'njeHesabu' => $officeNjeHesabu], 200);
     }
+
+    public function getMahesabuWithTwoDates(HesabuKuuRequest $request)
+    {
+        $ofisiId = $request->ofisiId;
+        $startDate = Carbon::parse($request->startDate)->startOfDay();
+        $endDate = Carbon::parse($request->endDate)->endOfDay();
+        $categories = ['PESA', 'MPESA', 'AIRTELMONEY', 'TIGOPESA'];
+        $data = [];
+
+        // Retrieve all records Balance of range of days between startDate and endDate
+        $balances = Balance::whereBetween('tareheHesabu', [$startDate, $endDate])
+                    ->whereRelation('office', 'office_id', $ofisiId)
+                    ->get()
+                    ->groupBy('tareheHesabu');
+
+        // Loop through each unique tareheHesabu
+        foreach ($balances as $tareheHesabu => $balanceGroup) {
+            $latestBalance = [];
+            $mudaHesabu = '';
+            $mudaHesabuIliyopita = '';
+
+            // Retrieve latest balances for each category within the current balance group
+            foreach ($categories as $category) {
+                $balance = $balanceGroup->where('aina', $category)->sortByDesc('created_at')->first();
+
+                if ($balance) {
+                    $latestBalance[] = $balance;
+                    $mudaHesabu = $balance->tareheHesabu;
+                    $mudaHesabuIliyopita = $balance->tareheHesabuIliyopita; 
+                }
+            }
+
+            // Data ndani ya hesabu
+            $officeNdaniHesabu = Office::with([
+                'mapato' => function ($query) use ($mudaHesabuIliyopita, $mudaHesabu) {
+                    // Filter incomes based on the latest timestamp
+                    $query->whereBetween('created_at', [$mudaHesabuIliyopita, $mudaHesabu]);
+                },
+                'matumizi' => function ($query) use ($mudaHesabuIliyopita, $mudaHesabu) {
+                    // Filter expenses based on the latest timestamp
+                    $query->whereBetween('created_at', [$mudaHesabuIliyopita, $mudaHesabu]);
+                },'user'
+            ])->where('id', $ofisiId)->get(); 
+
+            // Data baada ya hesabu
+            $officeNjeHesabu = Office::with([
+                'mapato' => function ($query) use ($mudaHesabu) {
+                    // Filter incomes based on the latest timestamp
+                    $query->whereBetween('created_at', [$mudaHesabu, Carbon::now()]);
+                },
+                'matumizi' => function ($query) use ($mudaHesabu) {
+                    // Filter expenses based on the latest timestamp
+                    $query->whereBetween('created_at', [$mudaHesabu, Carbon::now()]);
+                },'user'
+            ])->where('id', $ofisiId)->get(); 
+
+            // Add the data for the current tareheHesabu to the array
+            $data[] = [
+                'hesabu' => $latestBalance,
+                'muda' => Carbon::now(),
+                'ndaniHesabu' => $officeNdaniHesabu,
+                'njeHesabu' => $officeNjeHesabu
+            ];
+        }
+
+        return response()->json(['hesabu' => $data], 200);
+    }
+
+
 
     public function deleteHesabu(HesabuKuuRequest $request)
     {
