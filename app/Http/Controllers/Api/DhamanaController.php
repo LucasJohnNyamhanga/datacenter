@@ -41,8 +41,6 @@ class DhamanaController extends Controller
 
     }
 
-
-
     public function deleteDhamana(DeleteDhamanaRequest $request)
     {
         $id = $request->id;
