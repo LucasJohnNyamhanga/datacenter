@@ -279,4 +279,18 @@ class DepartmentController extends Controller
 
             return response()->json(['message' => 'Afisa Amewekwa Kitengoni'], 200);
     }
+
+
+    public function getDepartmentsWithOfices(BadiliKitengoAfisaRequest $request)
+    {
+        $department = Department::with(['office'])->get();
+
+        $data = [
+            'status' => 200,
+            'data' => $department
+        ];
+        return response()->json($data, 200);
+
+        
+    }
 }

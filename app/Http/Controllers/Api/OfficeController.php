@@ -7,6 +7,7 @@ use App\Http\Requests\getOfficeWithBalance;
 use App\Http\Requests\StoreofficeRequest;
 use App\Models\Balance;
 use App\Models\Office;
+use Illuminate\Support\Facades\Validator;
 
 class OfficeController extends Controller
 {
@@ -81,5 +82,50 @@ class OfficeController extends Controller
 
         return response()->json(['data' => $offices], 200);
         
+    }
+
+    public function editOfisi(StoreofficeRequest $request)
+    {
+    
+        $validator = Validator::make($request->all(), [
+            'jina' => 'required|string|max:255',
+            'kitengoId' => 'required|integer',
+            'asilimiaFomu' => 'required|integer',
+            'asilimiaRiba' => 'required|integer',
+            'id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Jaza nafasi zote zilizowazi', 'errors' => $validator->errors()], 400);
+        }
+
+        $jina = $request->input('jina');
+        $kitengoId = $request->input('kitengoId');
+        $asilimiaFomu = $request->input('asilimiaFomu');
+        $asilimiaRiba = $request->input('asilimiaRiba');
+        $id = $request->input('id');
+
+        // Retrieve the package by its ID
+        $office = Office::find($id);
+
+        if (!$office) {
+            return response()->json(['message' => 'Ofisi hii imeshaondolewa.'], 404);
+        }
+
+        // Check for existing package with the same title (excluding the current package being edited)
+        $existingOfisi = Office::where('jina', $jina)->where('id', '!=', $id)->first();
+        if ($existingOfisi) {
+            return response()->json(['message' => 'Kuna ofisi nyingine inatumia jina hili.'], 409);
+        }
+
+        // Update the existing package
+        $office->update([
+            'jina' => $jina,
+            'asilimiaMkopo' => $asilimiaRiba,
+            'asilimiaFomu' => $asilimiaFomu,
+            'department_id' => $kitengoId,
+        ]);
+
+        return response()->json(['message' => 'Kitengo kimebadilishwa taarifa.'], 200);
     }
 }

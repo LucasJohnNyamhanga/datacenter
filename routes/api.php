@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('taifishaDhamana', [DhamanaController::class, 'taifishaDhamana']);
     Route::post('badiliTawi', [AuthController::class, 'badiliTawi']);
     Route::post('getDepartments', [DepartmentController::class, 'getDepartments']);
-    Route::post('getDepartmentByUserId', [DepartmentController::class, 'getDepartmentByUserId']);
+    Route::get('getDepartmentByUserId', [DepartmentController::class, 'getDepartmentByUserId']);
     Route::post('activateUser', [AuthController::class, 'activateUser']);
     Route::post('storeDepartment', [DepartmentController::class, 'storeDepartment']);
     Route::post('badiliMeneja', [DepartmentController::class, 'badiliMeneja']);
@@ -88,6 +88,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('rekebishaCustomer', [CustomerController::class, 'rekebishaCustomer']);
     Route::get('getMatumiziWithTwoDate', [MatumiziController::class, 'getMatumiziWithTwoDate']);
     Route::get('getMapatoWithTwoDate', [MapatoController::class, 'getMapatoWithTwoDate']);
+    Route::post('editOfisi', [OfficeController::class, 'editOfisi']);
+    Route::get('getDepartmentsWithOfices', [DepartmentController::class, 'getDepartmentsWithOfices']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

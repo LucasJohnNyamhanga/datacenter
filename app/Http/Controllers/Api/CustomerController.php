@@ -9,6 +9,7 @@ use App\Http\Requests\StorecustomerRequest;
 use App\Http\Requests\UpdateAfisaMkopoCustomer;
 use App\Http\Requests\WatejaWanaofananaRequest;
 use App\Models\Customer;
+use App\Models\User;
 
 class CustomerController extends Controller
 {
@@ -182,7 +183,8 @@ class CustomerController extends Controller
                 ->orWhere('simu', 'LIKE', '%' . $namba . '%');
             })
         ->get();
-        return response()->json(['data' => $customer], 200);
+        $users = User::all();
+        return response()->json(['data' => $customer, 'users' => $users], 200);
     }
 
     public function getMteja(GetNewCustomerRequest $request)
