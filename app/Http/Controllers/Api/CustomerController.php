@@ -56,7 +56,7 @@ class CustomerController extends Controller
     public function getNewCustomer(GetNewCustomerRequest $request)
     {
         $officeId = $request->officeId;
-        $customer = Customer::with('loan')->whereRelation('loan', 'mpya', '=', true)
+        $customer = Customer::with('user','loan')->whereRelation('loan', 'mpya', '=', true)
         ->where('office_id','=',$officeId)
         ->whereRelation('loan', 'mpya', '=', true)
         ->get();
@@ -69,6 +69,7 @@ class CustomerController extends Controller
         $loanId = $request->loanId;
 
         $customer = Customer::with([
+            
             'loan' => function ($query) use ($loanId) {
         $query->where('id', $loanId)->latest()->take(1);
             },
@@ -93,6 +94,7 @@ class CustomerController extends Controller
                 }
 
         $customer = Customer::with([
+            'user',
             'loan' => function ($query) use ($loanId) {
         $query->where('id', $loanId)->latest()->take(1);
             },
@@ -114,7 +116,7 @@ class CustomerController extends Controller
     public function getKasoroCustomer(GetNewCustomerRequest $request)
     {
         $officeId = $request->officeId;
-        $customer = Customer::with('loan')->whereRelation('loan', 'kasoro', '=', true)
+        $customer = Customer::with('user','loan')->whereRelation('loan', 'kasoro', '=', true)
         ->where('office_id','=',$officeId)
         ->whereRelation('loan', 'kasoro', '=', true)
         ->get();
@@ -145,7 +147,7 @@ class CustomerController extends Controller
                 }
             }
 
-        $customers = Customer::with(['loan' => function ($query) {
+        $customers = Customer::with(['user','loan' => function ($query) {
                 $query->latest()->take(1);
             }, 'mdhamini', 'dhamana', 'marejesho'])
             ->where('office_id', '=', $officeId)
@@ -174,7 +176,7 @@ class CustomerController extends Controller
     {
         $jina = $request->jina;
         $namba = $request->namba;
-        $customer = Customer::with(['loan' => function ($query) {
+        $customer = Customer::with(['user','loan' => function ($query) {
                 $query->latest()->take(1);
             }, 'mdhamini', 'dhamana', 'marejesho'])
             ->whereRelation('loan', 'hali', '=', true)
@@ -183,8 +185,7 @@ class CustomerController extends Controller
                 ->orWhere('simu', 'LIKE', '%' . $namba . '%');
             })
         ->get();
-        $users = User::all();
-        return response()->json(['data' => $customer, 'users' => $users], 200);
+        return response()->json(['data' => $customer,], 200);
     }
 
     public function getMteja(GetNewCustomerRequest $request)
@@ -193,7 +194,7 @@ class CustomerController extends Controller
         $jina = $request->jina;
 
         // Fetch customers with their relationships and filter based on conditions
-        $customers = Customer::with(['loan' => function ($query) {
+        $customers = Customer::with(['user','loan' => function ($query) {
                 $query->latest()->take(1);
             }, 'mdhamini', 'dhamana', 'marejesho'])
             ->whereRelation('loan', function ($query) {
@@ -220,7 +221,7 @@ class CustomerController extends Controller
     public function getWatejaWaliomaliza(GetNewCustomerRequest $request)
     {
         $officeId = $request->officeId;
-        $customers = Customer::with(['loan' => function ($query) {
+        $customers = Customer::with(['user','loan' => function ($query) {
                 $query->latest()->take(1);
             }, 'mdhamini', 'dhamana', 'marejesho'])
         ->where('office_id', $officeId)
