@@ -126,6 +126,6 @@ class OfficeController extends Controller
             'department_id' => $kitengoId,
         ]);
 
-        return response()->json(['message' => 'Kitengo kimebadilishwa taarifa.'], 200);
+        return response()->json(['message' => 'Ofisi imebadilishiwa taarifa.'], 200);
     }
 }

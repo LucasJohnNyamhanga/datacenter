@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -203,5 +204,87 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'Afisa Ameshindwa kupatikana'], 404);
+    }
+
+    public function editUser(ChangeUserStatusRequest $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|string',
+            'jinaKamili' => 'required|string|max:255',
+            'jinaMdhamini' => 'required|string|max:255',
+            'simuMdhamini' => 'required|string',
+            'picha' => 'required|string|max:255',
+            'officeId' => 'required|numeric',
+            'departmentId' => 'required|numeric',
+            'username' => 'required|string',
+            'id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Hakikisha sehemu zote zimejazwa', 'errors' => $validator->errors()], 400);
+        }
+
+        $mobile = $request->input('mobile');
+        $jinaKamili = $request->input('jinaKamili');
+        $jinaMdhamini = $request->input('jinaMdhamini');
+        $simuMdhamini = $request->input('simuMdhamini');
+        $picha = $request->input('picha');
+        $officeId = $request->input('officeId');
+        $departmentId = $request->input('departmentId');
+        $username = $request->input('username');
+        $id = $request->input('id');
+
+        // Retrieve the package by its ID
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Mtumishi hajapatikana.'], 404);
+        }
+
+        // Check for existing package with the same title (excluding the current package being edited)
+        $existingUser = User::where('jinaKamili', $jinaKamili)
+        ->where('id','!=' ,$id)
+        ->first();
+        if ($existingUser) {
+            return response()->json(['message' => 'Mtumishi mwingine anatumia jina hilo, imeshindikana kubadili.'], 409);
+        }
+
+        // Update the existing package
+        $user->update([
+            'mobile' => $mobile,
+            'jinaKamili' => $jinaKamili,
+            'username' => $username,
+            'picha' => $picha,
+            'jinaMdhamini' => $jinaMdhamini,
+            'simuMdhamini' => $simuMdhamini,
+            'department_id' => $departmentId,
+            'office_id' => $officeId,
+        ]);
+
+        return response()->json(['message' => 'Mtumishi amebadilishiwa taarifa.'], 200);
+    }
+
+    public function getUserById(BadiliTawiRequest $request)
+        {
+            $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Mtumishi hana namba ya kitambulisho (ID)', 'errors' => $validator->errors()], 400);
+        }
+
+        $id = $request->input('id');
+
+        $user = User::with(['department','office'])->where('id',$id)
+        ->first();
+        
+        User::find($id);
+
+        if ($user) {
+            return response()->json(['user' => $user], 200);
+        } else {
+            return response()->json(['message' => 'Hakuna mtumishi aliyepatikana'], 401);
+        }
     }
 }

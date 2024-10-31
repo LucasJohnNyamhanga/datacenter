@@ -90,6 +90,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('getMapatoWithTwoDate', [MapatoController::class, 'getMapatoWithTwoDate']);
     Route::post('editOfisi', [OfficeController::class, 'editOfisi']);
     Route::get('getDepartmentsWithOfices', [DepartmentController::class, 'getDepartmentsWithOfices']);
+    Route::post('editUser', [AuthController::class, 'editUser']);
+    Route::get('getUserById', [AuthController::class, 'getUserById']);
 });
 
 Route::post('login', [AuthController::class, 'login']);
