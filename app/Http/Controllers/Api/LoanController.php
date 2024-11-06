@@ -18,6 +18,7 @@ class LoanController extends Controller
         $siku = $request->siku;
         $kiasi = $request->kiasi;
         $customer_id = $request->customerId;
+        $riba = $request->riba;
 
         $customer = Customer::with(['loan'])
         ->where('id', $customer_id)
@@ -41,6 +42,7 @@ class LoanController extends Controller
             'maelezo' => '',
             'njeMuda' => false,
             'mpya' => true,
+            'riba' => $riba,
         ]);
 
         return response()->json(['message' => 'Mkopo Umesajiliwa'], 200);
@@ -86,11 +88,12 @@ class LoanController extends Controller
         $id = $request->loanId;
         $kiasi = $request->kiasi;
         $siku = $request->siku;
+        $riba = $request->riba;
 
         $loan = Loan::find($id);
         $loan->kiasi = $kiasi;
         $loan->siku = $siku;
-        
+        $loan->riba = $riba;
         $loan->save();
 
         return response()->json(['message' => 'Mkopo Umebadilishwa Taarifa.'], 200);

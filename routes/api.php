@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AinaMkopoController;
 use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\FainiController;
@@ -92,6 +93,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('getDepartmentsWithOfices', [DepartmentController::class, 'getDepartmentsWithOfices']);
     Route::post('editUser', [AuthController::class, 'editUser']);
     Route::get('getUserById', [AuthController::class, 'getUserById']);
+    Route::post('storeAinaMkopo', [AinaMkopoController::class, 'storeAinaMkopo']);
+    Route::get('getAinaMikopo', [AinaMkopoController::class, 'getAinaMikopo']);
+    Route::post('editAinaMkopo', [AinaMkopoController::class, 'editAinaMkopo']);
+    Route::post('futaAinaMkopo', [AinaMkopoController::class, 'futaAinaMkopo']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

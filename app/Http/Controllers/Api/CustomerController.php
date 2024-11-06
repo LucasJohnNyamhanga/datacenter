@@ -9,49 +9,79 @@ use App\Http\Requests\StorecustomerRequest;
 use App\Http\Requests\UpdateAfisaMkopoCustomer;
 use App\Http\Requests\WatejaWanaofananaRequest;
 use App\Models\Customer;
+use App\Models\Loan;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
-    //
-    public function storeCustomer(StorecustomerRequest $request){
+    public function storeCustomer(StorecustomerRequest $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'jina' => 'required|string|max:255',
+            'jinaMaarufu' => 'required|string',
+            'jinsia' => 'required|string',
+            'anapoishi' => 'required|string',
+            'simu' => 'required|string',
+            'kazi' => 'required|string',
+            'picha' => 'required|string|max:255',
+            'officeId' => 'required|integer',
+            'userId' => 'required|integer',
+            'siku' => 'required|integer',
+            'kiasi' => 'required|integer',
+            'riba' => 'required|integer',
+        ]);
 
-        $jina = $request->jina;
-        $jinaMaarufu = $request->jinaMaarufu;
-        $jinsia = $request->jinsia;
-        $anapoishi = $request->anapoishi;
-        $simu = $request->simu;
-        $kazi = $request->kazi;
-        $picha = $request->picha;
-        $offices_id = $request->officeId;
-        $users_id = $request->userId;
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Jaza nafasi zote zilizo wazi', 'errors' => $validator->errors()], 400);
+        }
 
-        if (empty($jina) || empty($jinaMaarufu) || empty($jinsia) || empty($anapoishi)|| empty($simu)|| empty($kazi)|| empty($picha)|| empty($offices_id)|| empty($users_id)) {
-            return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
-        } else {
-                $customer = Customer::query()->where("jina", $jina)
-                ->orWhere('simu', '=', $simu)
+        DB::beginTransaction();
+
+        try {
+            $customer = Customer::query()
+                ->where("jina", $request->input('jina'))
+                ->orWhere('simu', '=', $request->input('simu'))
                 ->first();
-                if (!$customer) {
-                    $customer = Customer::create([
-                        'jina' => $jina,
-                        'jinaMaarufu' => $jinaMaarufu,
-                        'jinsia' => $jinsia,
-                        'anapoishi' => $anapoishi,
-                        'simu' => $simu,
-                        'kazi' => $kazi,
-                        'picha' => $picha,
-                        'office_id' => $offices_id,
-                        'user_id' => $users_id,
-                    ]);
 
-                    $id = $customer->id;
-                    return response()->json(['message' => $id], 200);
-                } else {
-                    return response()->json(['message' => 'Tayari Mteja Ameshasajiliwa.'], 401);
-                }
+            if (!$customer) {
+                $customer = Customer::create([
+                    'jina' => $request->input('jina'),
+                    'jinaMaarufu' => $request->input('jinaMaarufu'),
+                    'jinsia' => $request->input('jinsia'),
+                    'anapoishi' => $request->input('anapoishi'),
+                    'simu' => $request->input('simu'),
+                    'kazi' => $request->input('kazi'),
+                    'picha' => $request->input('picha'),
+                    'office_id' => $request->input('officeId'),
+                    'user_id' => $request->input('userId'),
+                ]);
+
+                Loan::create([
+                    'siku' => $request->input('siku'),
+                    'kiasi' => $request->input('kiasi'),
+                    'customer_id' => $customer->id,
+                    'hali' => false,
+                    'kasoro' => false,
+                    'maelezo' => '',
+                    'njeMuda' => false,
+                    'mpya' => true,
+                    'riba' => $request->input('riba'),
+                ]);
+
+                DB::commit();
+
+                return response()->json(['message' => 'Mteja amesajiliwa kikamilifu, taarifa zake zipo kwenye Maombi mapya.'], 200);
+            } else {
+                return response()->json(['message' => 'Mteja hawezi kusajiliwa, taarifa zake zina mteja mwingine.'], 401);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Kuna tatizo limetokea wakati wa kumsajili mteja, usajili umesitishwa.'], 500);
         }
     }
+
 
     public function getNewCustomer(GetNewCustomerRequest $request)
     {
@@ -71,7 +101,9 @@ class CustomerController extends Controller
         $customer = Customer::with([
             
             'loan' => function ($query) use ($loanId) {
-        $query->where('id', $loanId)->latest()->take(1);
+                $query->where('id', $loanId)
+                ->latest()
+                ->take(1);
             },
             'mdhamini',
             'dhamana',

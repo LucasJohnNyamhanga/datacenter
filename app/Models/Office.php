@@ -51,6 +51,11 @@ class Office extends Model
         return $this->hasMany(Balance::class);
     }
 
+    public function aina():HasMany
+    {
+        return $this->hasMany(Aina::class);
+    }
+
     protected $fillable = [
         'jina',
         'asilimiaMkopo',
