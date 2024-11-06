@@ -50,11 +50,12 @@ class MdhaminiController extends Controller
     {
         $id = $request->id;
         $record = Mdhamini::find($id);
+        $baseUrl = env('APP_URL');
 
         if ($record) {
             $imagePath = $record->picha;
             
-            $filePathImage = trim(str_replace('https://database.co.tz/', '', $imagePath));
+            $filePathImage = trim(str_replace($baseUrl, '', $imagePath));
             $filePath = public_path($filePathImage);
             if (file_exists($filePath)) {
                 unlink($filePath);

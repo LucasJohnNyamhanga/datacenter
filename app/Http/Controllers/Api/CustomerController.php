@@ -186,6 +186,7 @@ class CustomerController extends Controller
             ->whereHas('loan', function ($query) {
                     $query->where('hali', true);
                 })
+            ->latest()
             ->get();
 
         return response()->json(['data' => $customers], 200);
@@ -324,15 +325,16 @@ class CustomerController extends Controller
         }
 
         // Handle image deletion
+        $baseUrl = env('APP_URL');
         $imagePath = $customer->picha;
-        $filePathImage = trim(str_replace('https://database.co.tz/', '', $imagePath));
+        $filePathImage = trim(str_replace($baseUrl, '', $imagePath));
         $filePath = public_path($filePathImage);
 
         if (file_exists($filePath)) {
             unlink($filePath);
         }
 
-        // Update customer details
+        // Update customer detailsS
         $customer->user_id = $users_id;
         $customer->jina = $jina;
         $customer->jinaMaarufu = $jinaMaarufu;
