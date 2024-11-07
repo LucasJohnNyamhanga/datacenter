@@ -19,6 +19,7 @@ class LoanController extends Controller
         $kiasi = $request->kiasi;
         $customer_id = $request->customerId;
         $riba = $request->riba;
+        $fomu = $request->fomu;
 
         $customer = Customer::with(['loan'])
         ->where('id', $customer_id)
@@ -43,6 +44,7 @@ class LoanController extends Controller
             'njeMuda' => false,
             'mpya' => true,
             'riba' => $riba,
+            'form' => $fomu,
         ]);
 
         return response()->json(['message' => 'Mkopo Umesajiliwa'], 200);
@@ -68,6 +70,7 @@ class LoanController extends Controller
         $id = $request->id;
         $rejesho = $request->rejesho;
         $riba = $request->riba;
+        $fomu = $request->fomu;
 
         $loan = Loan::find($id);
         $loan->maelezo = '';
@@ -76,6 +79,7 @@ class LoanController extends Controller
         $loan->hali = true;
         $loan->rejesho = $rejesho;
         $loan->riba = $riba;
+        $loan->form = $fomu;
         $loan->mwanzoMkopo = Carbon::now();
     
         $loan->save();
@@ -89,11 +93,13 @@ class LoanController extends Controller
         $kiasi = $request->kiasi;
         $siku = $request->siku;
         $riba = $request->riba;
+        $fomu = $request->fomu;
 
         $loan = Loan::find($id);
         $loan->kiasi = $kiasi;
         $loan->siku = $siku;
         $loan->riba = $riba;
+        $loan->form = $fomu;
         $loan->save();
 
         return response()->json(['message' => 'Mkopo Umebadilishwa Taarifa.'], 200);

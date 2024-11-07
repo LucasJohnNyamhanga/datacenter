@@ -18,6 +18,7 @@ class AinaMkopoController extends Controller
             'officeId' => 'required|integer',
             'riba' => 'required|integer',
             'siku' => 'required|integer',
+            'fomu' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -28,6 +29,7 @@ class AinaMkopoController extends Controller
         $officeId = $request->input('officeId');
         $riba = $request->input('riba');
         $siku = $request->input('siku');
+        $fomu = $request->input('fomu');
 
         $office = Office::find($officeId);
 
@@ -40,6 +42,7 @@ class AinaMkopoController extends Controller
             'jina' => $jina,
             'riba' => $riba,
             'siku' => $siku,
+            'fomu' => $fomu,
             'office_id' => $officeId,
         ]);
 
@@ -73,6 +76,7 @@ class AinaMkopoController extends Controller
             'riba' => 'required|integer',
             'siku' => 'required|integer',
             'id' => 'required|integer',
+            'fomu' => 'required|integer',
         ]);
         
 
@@ -85,6 +89,7 @@ class AinaMkopoController extends Controller
         $riba = $request->input('riba');
         $siku = $request->input('siku');
         $id = $request->input('id');
+        $fomu = $request->input('fomu');
 
         $aina = Aina::find($id);
 
@@ -93,6 +98,7 @@ class AinaMkopoController extends Controller
             'jina' => $jina,
             'riba' => $riba,
             'siku' => $siku,
+            'fomu' => $fomu,
             'office_id' => $officeId,
         ]);
 

@@ -19,6 +19,7 @@ class Aina extends Model
         'jina',
         'riba',
         'siku',
-        'office_id'
+        'office_id',
+        'fomu'
     ];
 }

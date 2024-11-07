@@ -55,6 +55,7 @@ class Loan extends Model
         'maelezo',
         'njeMuda',
         'mpya',
-        'riba'
+        'riba',
+        'form'
     ];
 }

@@ -31,6 +31,7 @@ class CustomerController extends Controller
             'siku' => 'required|integer',
             'kiasi' => 'required|integer',
             'riba' => 'required|integer',
+            'fomu' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -68,6 +69,7 @@ class CustomerController extends Controller
                     'njeMuda' => false,
                     'mpya' => true,
                     'riba' => $request->input('riba'),
+                    'fomu' => $request->input('fomu'),
                 ]);
 
                 DB::commit();

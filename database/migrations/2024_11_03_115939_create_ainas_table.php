@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('jina');
             $table->integer('riba');
             $table->integer('siku');
+            $table->integer('fomu');
             $table->foreignId('office_id');
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->timestamps();
