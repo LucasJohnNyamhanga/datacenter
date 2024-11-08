@@ -21,7 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::post('logout', [AuthController::class, 'logout']); 
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('logWithAccessToken', [AuthController::class, 'logWithAccessToken']); 
     Route::post('storeCustomer', [CustomerController::class, 'storeCustomer']);
     Route::post('storeOffice', [OfficeController::class, 'storeOffice']);
     Route::post('storeLoan', [LoanController::class, 'storeLoan']);

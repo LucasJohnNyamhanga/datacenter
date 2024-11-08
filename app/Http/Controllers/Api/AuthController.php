@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -52,6 +53,28 @@ class AuthController extends Controller
             return response()->json(['message' => 'Tumia jina au password halisi'], 401);
         }
     
+
+    }
+
+    public function logWithAccessToken(LoginRequest $request)
+    {
+        $user = User::where("id", Auth::id())->where("isActive", true)->first();
+                $office = Office::all();        
+                $department = Department::all();
+                $data = [
+                    'status' => 200,
+                    'department' => $department,
+                    'office'=>$office,
+                    'user'=>$user,
+                ];
+
+        if($user){
+            return response()->json($data, 200);
+        }else{
+            return response()->json(['message' => 'Uhakiki wa utumishi wako umeshindikana, wasiliana na admin.'], 404);
+        }
+                
+        
 
     }
     public function signup(SignupRequest $request)
