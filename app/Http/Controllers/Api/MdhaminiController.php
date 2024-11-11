@@ -38,7 +38,7 @@ class MdhaminiController extends Controller
 
                 return response()->json(['message' => 'Mdhamini Kasajiliwa'], 200);
             } else {
-                return response()->json(['message' => 'Tayari jina La Mdhamini Limeshasajiliwa.'], 401);
+                return response()->json(['message' => 'Tayari Mdhamini Ameshatumika kwenye mkopo mwingine.'], 401);
             }
         }
 

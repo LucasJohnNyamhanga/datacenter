@@ -256,16 +256,29 @@ class CustomerController extends Controller
     public function getWatejaWaliomaliza(GetNewCustomerRequest $request)
     {
         $officeId = $request->officeId;
-        $customers = Customer::with(['user','loan' => function ($query) {
-                $query->latest()->take(1);
-            }, 'mdhamini', 'dhamana', 'marejesho'])
-        ->where('office_id', $officeId)
-        ->whereDoesntHave('loan', function ($query) {
-            $query->where('mpya', true)->orWhere('hali', true);
-        })
-        ->get();
 
-        // Return the filtered customers in the response
+        $customers = Customer::with([
+                'user', 
+                'mdhamini',
+                'dhamana',
+                'marejesho',
+                'loan' => function ($query) {
+                    $query->latest()->take(1); // Only load the latest loan for display
+                }
+            ])
+            ->where('office_id', $officeId)
+            ->whereHas('loan', function ($query) {
+                $query->where('mpya', false)
+                    ->where('kasoro', false)
+                    ->where('hali', false)
+                    ->where('created_at', function ($subquery) {
+                        $subquery->selectRaw('MAX(created_at)')
+                                ->from('loans')
+                                ->whereColumn('loans.customer_id', 'customers.id');
+                    });
+            })
+            ->get();
+
         return response()->json(['data' => $customers], 200);
     }
 
