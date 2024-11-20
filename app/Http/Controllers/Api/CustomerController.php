@@ -181,15 +181,28 @@ class CustomerController extends Controller
                 }
             }
 
-        $customers = Customer::with(['user','loan' => function ($query) {
-                $query->latest()->take(1);
-            }, 'mdhamini', 'dhamana', 'marejesho'])
-            ->where('office_id', '=', $officeId)
-            ->whereHas('loan', function ($query) {
-                    $query->where('hali', true);
-                })
-            ->latest()
-            ->get();
+        $customers = Customer::with([
+        'user',
+        'loan' => function ($query) {
+            $query->latest('created_at')->take(1); // Fetch the latest loan
+        },
+        'mdhamini',
+        'dhamana',
+        'marejesho'
+        ])
+        ->where('office_id', '=', $officeId) // Filter by office
+        ->whereHas('loan', function ($query) {
+            $query->where('hali', true); // Filter loans with 'hali' as true
+        })
+        ->orderBy(function ($query) {
+            // Order customers by the latest loan's 'created_at'
+            return $query->select('created_at')
+                ->from('loans')
+                ->whereColumn('loans.customer_id', 'customers.id')
+                ->orderBy('created_at', 'desc')
+                ->limit(1);
+        }, 'desc')
+        ->get();
 
         return response()->json(['data' => $customers], 200);
     }
