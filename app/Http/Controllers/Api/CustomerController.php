@@ -69,7 +69,7 @@ class CustomerController extends Controller
                     'njeMuda' => false,
                     'mpya' => true,
                     'riba' => $request->input('riba'),
-                    'fomu' => $request->input('fomu'),
+                    'form' => $request->input('fomu'),
                 ]);
 
                 DB::commit();

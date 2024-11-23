@@ -23,7 +23,7 @@ class MdhaminiController extends Controller
             return response()->json(['message' => 'Jaza sehemu zote zilizo wazi'], 401);
         } else {
 
-            $mdhaminiCheck = Mdhamini::query()->where("jina", $jina)->first();
+            $mdhaminiCheck = Mdhamini::query()->where("jina", $jina)->where("loan_id", $loans_id)->first();
 
             if (!$mdhaminiCheck) {
                 $mdhamini = Mdhamini::create([
@@ -38,7 +38,7 @@ class MdhaminiController extends Controller
 
                 return response()->json(['message' => 'Mdhamini Kasajiliwa'], 200);
             } else {
-                return response()->json(['message' => 'Tayari Mdhamini Ameshatumika kwenye mkopo mwingine.'], 401);
+                return response()->json(['message' => 'Tayari Mdhamini Ameshatumika kwenye mkopo huu.'], 401);
             }
         }
 
